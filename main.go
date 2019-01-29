@@ -66,13 +66,13 @@ func scanDir(currentDir string, deepLevel, columnBit int) error {
 			}
 		} else {
 			if i+1 == dirNum {
-				printTab(deepLevel, columnBit)
-				fmt.Printf("%s\n", list[i].Name())
+				printTab(deepLevel-1, columnBit)
+				fmt.Printf("| %s\n", list[i].Name())
 				printTab(deepLevel-1, columnBit)
 				fmt.Println()
 			} else {
-				printTab(deepLevel, columnBit)
-				fmt.Printf("%s\n", list[i].Name())
+				printTab(deepLevel-1, columnBit)
+				fmt.Printf("| %s\n", list[i].Name())
 			}
 		}
 	}
