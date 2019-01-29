@@ -17,62 +17,62 @@ const (
 
 func main() {
 
-	var choisePath string
-
 	app := cli.NewApp()
 	app.Name = "lt"
 	app.Usage = "show directory"
 	app.Action = func(c *cli.Context) {
-		args := c.Args()
-		if len(args) < 1 {
-			choisePath = "./"
+		if len(c.Args()) < 1 {
+			checkError(lt("./"))
 		} else {
-			choisePath = string(args[0])
+			checkError(lt(string(c.Args()[0])))
 		}
-		err := printCurrentDir(choisePath)
-		checkError(err)
-		err = scanDir(choisePath, 1, 1)
-		checkError(err)
-		fmt.Println()
 	}
 
 	app.Run(os.Args)
 
 }
 
+func lt(dirPath string) error {
+
+	err := printCurrentDir(dirPath)
+	if err != nil {
+		return err
+	}
+	err = scanDir(dirPath, 1, 1)
+	if err != nil {
+		return err
+	}
+	fmt.Println()
+	return nil
+
+}
+
 func scanDir(currentDir string, deepLevel, columnBit int) error {
 
 	list, err := ioutil.ReadDir(currentDir)
-	checkError(err)
+	if err != nil {
+		return err
+	}
 	dirNum := len(list)
 
 	for i := 0; i < dirNum; i++ {
 		if list[i].Name()[0] == '.' {
 			continue
 		}
+		if !list[i].IsDir() {
+			printTab(deepLevel-1, columnBit)
+			fmt.Printf("| %s\n", list[i].Name())
+		}
 		if list[i].IsDir() {
+			printTab(deepLevel, columnBit)
+			fmt.Println()
+			printTab(deepLevel-1, columnBit)
 			if i+1 == dirNum {
-				printTab(deepLevel, columnBit)
-				fmt.Println()
-				printTab(deepLevel-1, columnBit)
 				fmt.Printf("└-%s\n", list[i].Name())
 				scanDir(path.Join(currentDir, list[i].Name()), deepLevel+1, columnBit+1<<uint(deepLevel)-1<<uint(deepLevel-1))
 			} else {
-				printTab(deepLevel, columnBit)
-				fmt.Println()
-				printTab(deepLevel-1, columnBit)
 				fmt.Printf("├-%s\n", list[i].Name())
 				scanDir(path.Join(currentDir, list[i].Name()), deepLevel+1, columnBit+1<<uint(deepLevel))
-			}
-		} else {
-			if i+1 == dirNum {
-				printTab(deepLevel-1, columnBit)
-				fmt.Printf("| %s\n", list[i].Name())
-				printTab(deepLevel-1, columnBit)
-				fmt.Println()
-			} else {
-				printTab(deepLevel-1, columnBit)
-				fmt.Printf("| %s\n", list[i].Name())
 			}
 		}
 	}
@@ -109,7 +109,9 @@ func printCurrentDir(dir string) error {
 }
 
 func checkError(err error) {
+
 	if err != nil {
 		log.Fatal(err)
 	}
+
 }
