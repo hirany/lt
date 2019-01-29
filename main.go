@@ -47,6 +47,9 @@ func scanDir(currentDir string, deepLevel, columnBit int) error {
 	dirNum := len(list)
 
 	for i := 0; i < dirNum; i++ {
+		if list[i].Name()[0] == '.' {
+			continue
+		}
 		if list[i].IsDir() {
 			if i+1 == dirNum {
 				printTab(deepLevel, columnBit)
