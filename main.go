@@ -71,6 +71,7 @@ func scanDir(currentDir string, deepLevel, columnBit int) error {
 }
 
 func printTab(deepLevel, columnBit int) {
+
 	for i := 0; i < deepLevel; i++ {
 		if columnBit&1 == 1 {
 			fmt.Print(tabColumn)
@@ -79,6 +80,7 @@ func printTab(deepLevel, columnBit int) {
 		}
 		columnBit >>= 1
 	}
+
 }
 
 func printCurrentDir(dir string) error {
@@ -88,6 +90,7 @@ func printCurrentDir(dir string) error {
 	if err != nil {
 		return err
 	}
+
 	fmt.Printf("%s\n", file.Name())
 
 	return nil
