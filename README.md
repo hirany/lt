@@ -1,4 +1,4 @@
-# shwo tree
+# show tree
 
 lsを使おうとしてltと打ってしまったときに動作するものです．
 
