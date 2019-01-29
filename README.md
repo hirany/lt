@@ -1,4 +1,12 @@
 # shwo tree
 
-How to install "go install"
-command "lt"
+lsを使おうとしてltと打ってしまったときに動作するものです．
+
+install 
+```
+go install
+```
+use
+```
+lt
+```

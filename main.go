@@ -45,7 +45,7 @@ func scanDir(currentDir string, deepLevel, columnBit int) error {
 				fmt.Println()
 				printTab(deepLevel-1, columnBit)
 				fmt.Printf("└-%s\n", list[i].Name())
-				scanDir(path.Join(currentDir, list[i].Name()), deepLevel+1, columnBit<<1)
+				scanDir(path.Join(currentDir, list[i].Name()), deepLevel+1, columnBit+1<<uint(deepLevel)-1<<uint(deepLevel-1))
 			} else {
 				printTab(deepLevel, columnBit)
 				fmt.Println()
