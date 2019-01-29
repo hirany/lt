@@ -17,13 +17,21 @@ const (
 
 func main() {
 
+	var choisePath string
+
 	app := cli.NewApp()
 	app.Name = "lt"
 	app.Usage = "show directory"
 	app.Action = func(c *cli.Context) {
-		err := printCurrentDir("./")
+		args := c.Args()
+		if len(args) < 1 {
+			choisePath = "./"
+		} else {
+			choisePath = string(args[0])
+		}
+		err := printCurrentDir(choisePath)
 		checkError(err)
-		err = scanDir("./", 1, 1)
+		err = scanDir(choisePath, 1, 1)
 		checkError(err)
 		fmt.Println()
 	}
