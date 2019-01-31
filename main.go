@@ -16,7 +16,6 @@ const (
 )
 
 func main() {
-
 	app := cli.NewApp()
 	app.Name = "lt"
 	app.Usage = "show directory"
@@ -27,34 +26,33 @@ func main() {
 			checkError(lt(string(c.Args()[0])))
 		}
 	}
-
 	app.Run(os.Args)
-
 }
 
 func lt(dirPath string) error {
-
-	err := printCurrentDir(dirPath)
+	err := os.Chdir(dirPath)
 	if err != nil {
 		return err
 	}
+	curDir, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+	fmt.Printf("%s\n", curDir)
 	err = scanDir(dirPath, 1, 1)
 	if err != nil {
 		return err
 	}
 	fmt.Println()
 	return nil
-
 }
 
 func scanDir(currentDir string, deepLevel, columnBit int) error {
-
 	list, err := ioutil.ReadDir(currentDir)
 	if err != nil {
 		return err
 	}
 	dirNum := len(list)
-
 	for i := 0; i < dirNum; i++ {
 		if list[i].Name()[0] == '.' {
 			continue
@@ -76,13 +74,10 @@ func scanDir(currentDir string, deepLevel, columnBit int) error {
 			}
 		}
 	}
-
 	return nil
-
 }
 
 func printTab(deepLevel, columnBit int) {
-
 	for i := 0; i < deepLevel; i++ {
 		if columnBit&1 == 1 {
 			fmt.Print(tabColumn)
@@ -91,27 +86,10 @@ func printTab(deepLevel, columnBit int) {
 		}
 		columnBit >>= 1
 	}
-
-}
-
-func printCurrentDir(dir string) error {
-
-	file, err := os.Open(dir)
-	defer file.Close()
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("%s\n", file.Name())
-
-	return nil
-
 }
 
 func checkError(err error) {
-
 	if err != nil {
 		log.Fatal(err)
 	}
-
 }
